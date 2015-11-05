@@ -1,6 +1,7 @@
 # -*- coding=utf-8 -*-
+import os
 import compileall
-from .files import get_files
+from .files import get_files, abs_path
 
 
 def compile(path):
@@ -8,9 +9,9 @@ def compile(path):
     compile .py to pyc
     """
     compileall.compile_dir(path, maxlevels=100, quiet=True)
-    
-    
-def compile_python_task(src, 
+
+
+def compile_python_task(src,
                         folder_blacklist=None, file_blacklist=None,
                         task_dep=None):
     """
@@ -19,8 +20,8 @@ def compile_python_task(src,
     if not task_dep:
         task_dep = []
     file_dep = get_files(src, ext=['.py'], folder_blacklist=folder_blacklist,
-                      file_blacklist=file_blacklist)
-    targets = [f+'c' for f in file_dep]
+                         file_blacklist=file_blacklist)
+    targets = [abs_path(src, f+'c') for f in file_dep]
     return {
         'actions': [
             (compile, [src]),

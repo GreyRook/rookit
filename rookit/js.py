@@ -1,7 +1,7 @@
 # -*- coding=utf-8 -*-
 import sys
 import subprocess as sp
-from .files import get_files, get_dist_path
+from .files import get_files, task_for_files
 
 
 def uglify(in_file, out_file):
@@ -19,21 +19,11 @@ def uglify(in_file, out_file):
     if proc.wait() != 0:
         print('uglifyjs FAILED for {}'.format(in_file))
         sys.exit(1)
-        
 
-def uglify_task(src_path, dist_path, 
+
+def uglify_task(src_path, dist_path,
                 folder_blacklist=None, file_blacklist=None, task_dep=None):
-    files = get_files(src_path, ext=['.js', '.json'], 
+    files = get_files(src_path, ext=['.js', '.json'],
                       folder_blacklist=folder_blacklist,
                       file_blacklist=file_blacklist)
-    for filename in files:
-        out = get_dist_path(src_path, dist_path, filename)
-        task = {
-            'name': filename + ' --> ' + out,
-            'actions': [(uglify, [filename, out])],
-            'targets': [out],
-            'file_dep': files
-        }
-        if task_dep:
-            task['task_dep'] = task_dep
-        yield task
+    yield task_for_files(uglify, src_path, dist_path, files)
