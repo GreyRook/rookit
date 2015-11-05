@@ -87,9 +87,7 @@ def copy_files_task(src_path, dist_path, ext=None,
     """
     copy all files from src_path to dist_path. Includes subfolders.
     """
-    files = get_files(src_path, ext=ext, folder_blacklist=folder_blacklist,
-                      file_blacklist=file_blacklist)
-    for filename in files:
-        # TODO: mengle with copy_file_task
-        task = copy_file_task(src_path, dist_path, filename, task_dep=task_dep)
-        yield task
+    for filename in get_files(src_path, ext=ext, 
+                              folder_blacklist=folder_blacklist,
+                              file_blacklist=file_blacklist):
+        yield copy_file_task(src_path, dist_path, filename, task_dep=task_dep)
