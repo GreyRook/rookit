@@ -48,6 +48,10 @@ def create_dist_path(out_file):
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
 
+def copy(src, dst):
+    create_dist_path(dst)
+    shutil.copy(src, dst)
+
 
 def task_for_file(task, src_path, dist_path, filename, task_dep=None):
     out_file = abs_path(dist_path, filename)
@@ -87,7 +91,7 @@ def copy_files_task(src_path, dist_path, ext=None,
     """
     copy all files from src_path to dist_path. Includes subfolders.
     """
-    for filename in get_files(src_path, ext=ext, 
+    for filename in get_files(src_path, ext=ext,
                               folder_blacklist=folder_blacklist,
                               file_blacklist=file_blacklist):
         yield copy_file_task(src_path, dist_path, filename, task_dep=task_dep)
