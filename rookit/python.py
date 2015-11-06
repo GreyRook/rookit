@@ -11,17 +11,17 @@ def compile(path):
     compileall.compile_dir(path, maxlevels=100, quiet=True)
 
 
-def compile_python_task(src,
+def compile_python_task(src, ext=None,
                         folder_blacklist=None, file_blacklist=None,
                         task_dep=None):
     """
     compile all python folder in given folder task
     """
 
-    file_dep = get_files(src, ext=None, folder_blacklist=folder_blacklist,
-                         file_blacklist=file_blacklist)
     if not ext:
         ext = ['.py']
+    file_dep = get_files(src, ext=ext, folder_blacklist=folder_blacklist,
+                         file_blacklist=file_blacklist)
     targets = [abs_path(src, f+'c') for f in file_dep]
     _task = {
         'actions': [
