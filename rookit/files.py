@@ -43,10 +43,11 @@ def abs_path(path, filename):
     return out
 
 
-def create_dist_path(out_file):
-    out_dir = os.path.dirname(out_file)
-    if not os.path.isdir(out_dir):
-        os.makedirs(out_dir)
+def create_dist_path(dst):
+    dst_dir = os.path.dirname(dst)
+    if not os.path.isdir(dst_dir):
+        os.makedirs(dst_dir)
+    return dst_dir
 
 def copy(src, dst):
     create_dist_path(dst)
@@ -54,16 +55,16 @@ def copy(src, dst):
 
 
 def task_for_file(task, src_path, dist_path, filename, task_dep=None):
-    out_file = abs_path(dist_path, filename)
-    in_file = abs_path(src_path, filename)
+    dst = abs_path(dist_path, filename)
+    src = abs_path(src_path, filename)
 
-    create_dist_path(out_file)
+    create_dist_path(dst)
 
     _task = {
-        'name': '{} --> {}'.format(in_file, out_file),
-        'actions': [(task, [in_file, out_file])],
-        'targets': [out_file],
-        'file_dep': [in_file],
+        'name': '{} --> {}'.format(src, dst),
+        'actions': [(task, [src, dst])],
+        'targets': [dst],
+        'file_dep': [src],
     }
     if task_dep:
         _task['task_dep'] = task_dep

@@ -4,20 +4,23 @@ import subprocess as sp
 from .files import get_files, task_for_files
 
 
-def uglify(in_file, out_file):
+def uglify(src, dst):
+    """
+    uglify src file as output file dst
+    """
     cmd = [
         'uglifyjs',
         '--mangle',
         '--compress', 'drop_console=true', # remove console.log
-        in_file,
-        '-o', out_file,
+        src,
+        '-o', dst,
     ]
 
     proc = sp.Popen(
         cmd,
         stdout=sp.PIPE)
     if proc.wait() != 0:
-        print('uglifyjs FAILED for {}'.format(in_file))
+        print('uglifyjs FAILED for {}'.format(src))
         sys.exit(1)
 
 

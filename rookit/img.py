@@ -1,3 +1,4 @@
+# -*- coding=utf-8 -*-
 import StringIO
 import os
 import subprocess as sp
@@ -14,9 +15,6 @@ CJPEG = '/home/f.ludwig/apps/mozjpeg/cjpeg' # TODO evil
 
 def optimize(src, dst):
     files.create_dist_path(dst)
-
-    if os.path.exists(dst):
-        os.unlink(dst)
 
     if src.endswith('.png'):
         sp.check_call(['optipng', '-out', dst, src])
