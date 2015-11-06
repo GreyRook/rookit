@@ -17,16 +17,19 @@ def compile_python_task(src,
     """
     compile all python folder in given folder task
     """
-    if not task_dep:
-        task_dep = []
-    file_dep = get_files(src, ext=['.py'], folder_blacklist=folder_blacklist,
+
+    file_dep = get_files(src, ext=None, folder_blacklist=folder_blacklist,
                          file_blacklist=file_blacklist)
+    if not ext:
+        ext = ['.py']
     targets = [abs_path(src, f+'c') for f in file_dep]
-    return {
+    _task = {
         'actions': [
             (compile, [src]),
         ],
         'file_dep': file_dep,
         'targets': targets,
-        'task_dep': task_dep
     }
+    if task_dep:
+        _task['task_dep'] = task_dep
+    return _task
