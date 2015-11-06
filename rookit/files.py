@@ -82,7 +82,7 @@ def copy_file_task(src_path, dist_path, filename, task_dep=None):
     """
     generate task to copy single file "filename" from src_path to dist_path
     """
-    yield task_for_file(shutil.copy, src_path, dist_path, filename, task_dep=task_dep)
+    yield task_for_file(copy, src_path, dist_path, filename, task_dep=task_dep)
 
 
 def copy_files_task(src_path, dist_path, ext=None,
