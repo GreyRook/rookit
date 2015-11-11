@@ -1,6 +1,6 @@
 # -*- coding=utf-8 -*-
 import csscompressor
-from .files import task_for_files, get_files
+from .files import _task_for_files, get_files
 
 
 def csscompress(src, out):
@@ -15,4 +15,4 @@ def compile_css_task(src_path, dist_path,
                       folder_blacklist=folder_blacklist,
                       file_blacklist=file_blacklist)
 
-    yield task_for_files(csscompress, src_path, dist_path, files)
+    yield _task_for_files(csscompress, src_path, dist_path, files)

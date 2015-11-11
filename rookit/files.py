@@ -54,7 +54,7 @@ def copy(src, dst):
     shutil.copy(src, dst)
 
 
-def task_for_file(task, src_path, dist_path, filename, task_dep=None):
+def _task_for_file(task, src_path, dist_path, filename, task_dep=None):
     dst = abs_path(dist_path, filename)
     src = abs_path(src_path, filename)
 
@@ -71,19 +71,19 @@ def task_for_file(task, src_path, dist_path, filename, task_dep=None):
     yield _task
 
 
-def task_for_files(task, src_path, dist_path, files, task_dep=None):
+def _task_for_files(task, src_path, dist_path, files, task_dep=None):
     """
     execute a task for all files
     """
     for filename in files:
-        yield task_for_file(task, src_path, dist_path, filename, task_dep=task_dep)
+        yield _task_for_file(task, src_path, dist_path, filename, task_dep=task_dep)
 
 
 def copy_file_task(src_path, dist_path, filename, task_dep=None):
     """
     generate task to copy single file "filename" from src_path to dist_path
     """
-    yield task_for_file(copy, src_path, dist_path, filename, task_dep=task_dep)
+    yield _task_for_file(copy, src_path, dist_path, filename, task_dep=task_dep)
 
 
 def copy_files_task(src_path, dist_path, ext=None,
@@ -95,4 +95,4 @@ def copy_files_task(src_path, dist_path, ext=None,
     for filename in get_files(src_path, ext=ext,
                               folder_blacklist=folder_blacklist,
                               file_blacklist=file_blacklist):
-        yield task_for_file(copy, src_path, dist_path, filename, task_dep=task_dep)
+        yield _task_for_file(copy, src_path, dist_path, filename, task_dep=task_dep)

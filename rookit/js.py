@@ -1,7 +1,7 @@
 # -*- coding=utf-8 -*-
 import sys
 import subprocess as sp
-from .files import get_files, task_for_files
+from .files import get_files, _task_for_files
 
 UGLIFYJS = 'uglifyjs'
 
@@ -26,4 +26,4 @@ def uglify_task(src_path, dist_path,
     files = get_files(src_path, ext=['.js', '.json'],
                       folder_blacklist=folder_blacklist,
                       file_blacklist=file_blacklist)
-    yield task_for_files(uglify, src_path, dist_path, files)
+    yield _task_for_files(uglify, src_path, dist_path, files)
