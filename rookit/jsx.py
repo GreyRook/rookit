@@ -2,12 +2,11 @@
 import sys
 import subprocess as sp
 import shutil
-from .files import get_files
+from .files import get_files, abs_path
 
 
 def compile(folder):
-    assert isinstance(folder, list)
-    sp.check_call(['jsx']+folder)
+    sp.check_call(['jsx']+[folder])
 
 
 def compile_jsx_task(src_path, dist_path,
@@ -18,7 +17,9 @@ def compile_jsx_task(src_path, dist_path,
     file_dep = get_files(src_path, ext=ext,
                          folder_blacklist=folder_blacklist,
                          file_blacklist=file_blacklist)
-    targets = get_files(dist_path, ext=['.js'])
+    targets = [abs_path(dist_path, d) for d in file_dep]
+    file_dep = [abs_path(src_path, d) for d in file_dep]
+
     _task = {
         'actions': [
             (compile, [src_path]),
