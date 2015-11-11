@@ -2,7 +2,7 @@
 import sys
 import subprocess as sp
 import shutil
-from .files import get_files, task_for_files
+from .files import get_files
 
 
 def compile(folder):
