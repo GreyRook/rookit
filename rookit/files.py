@@ -95,4 +95,4 @@ def copy_files_task(src_path, dist_path, ext=None,
     for filename in get_files(src_path, ext=ext,
                               folder_blacklist=folder_blacklist,
                               file_blacklist=file_blacklist):
-        yield copy_file_task(src_path, dist_path, filename, task_dep=task_dep)
+        yield task_for_file(copy, src_path, dist_path, filename, task_dep=task_dep)

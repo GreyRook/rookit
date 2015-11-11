@@ -3,25 +3,22 @@ import sys
 import subprocess as sp
 from .files import get_files, task_for_files
 
+UGLIFYJS = 'uglifyjs'
+
 
 def uglify(src, dst):
     """
     uglify src file as output file dst
     """
     cmd = [
-        'uglifyjs',
+        UGLIFYJS,
         '--mangle',
         '--compress', 'drop_console=true', # remove console.log
         src,
         '-o', dst,
     ]
-
-    proc = sp.Popen(
-        cmd,
-        stdout=sp.PIPE)
-    if proc.wait() != 0:
-        print('uglifyjs FAILED for {}'.format(src))
-        sys.exit(1)
+    # TODO: generate map file
+    sp.check_call(cmd)
 
 
 def uglify_task(src_path, dist_path,

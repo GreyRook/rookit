@@ -7,15 +7,7 @@ from .files import get_files, task_for_files
 
 def compile(folder):
     assert isinstance(folder, list)
-    cmd = ['jsx',]
-    cmd += folder
-
-    proc = sp.Popen(
-        cmd,
-        stdout=sp.PIPE)
-    if proc.wait() != 0:
-        print('jsx FAILED for {}'.format(folder))
-        sys.exit(1)
+    sp.check_call(['jsx']+folder)
 
 
 def compile_jsx_task(src_path, dist_path,

@@ -10,16 +10,18 @@ from . import files
 
 
 BASE = os.path.abspath(os.path.dirname(__file__))
-CJPEG = '/home/f.ludwig/apps/mozjpeg/cjpeg' # TODO evil
+OPTIPNG = 'optipng'
+SVGO = 'svgo'
+CJPEG = os.path.join(os.path.expanduser("~"), 'apps', 'mozjpeg', 'cjpeg') # TODO evil
 
 
 def optimize(src, dst):
     files.create_dist_path(dst)
 
     if src.endswith('.png'):
-        sp.check_call(['optipng', '-out', dst, src])
+        sp.check_call([OPTIPNG, '-out', dst, src])
     elif src.endswith('.svg'):
-        sp.check_call(['svgo', '--multipass', '-i', src, '-o', dst])
+        sp.check_call([SVGO, '--multipass', '-i', src, '-o', dst])
     else:
         shutil.copy(src, dst)
 
