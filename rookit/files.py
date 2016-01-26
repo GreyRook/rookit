@@ -1,6 +1,7 @@
 # -*- coding=utf-8 -*-
 import sys
 import os
+import fnmatch
 import shutil
 
 def get_files(src_path, ext=None, folder_blacklist=None, file_blacklist=None):
@@ -33,6 +34,43 @@ def get_files(src_path, ext=None, folder_blacklist=None, file_blacklist=None):
             )
     return files
 
+
+def get_files2(src_path, ext=None, folder_blacklist=None, file_blacklist=None):
+    """
+    get list of all files in folder (including subfolder)
+
+    returns file path relative to the src-folder
+    """
+    if isinstance(ext, basestring):
+        ext = [ext]
+    files = []
+    if folder_blacklist is None:
+        folder_blacklist = []
+    folder_blacklist = [folder.strip('/') for folder in folder_blacklist]
+    for dirpath, dirnames, filenames in os.walk(src_path):
+        rel_folder = dirpath[len(src_path):]
+        rel_folder = rel_folder.strip('/')
+        print rel_folder, folder_blacklist
+        if folder_blacklist and \
+                any([fnmatch.fnmatch(rel_folder, bl) for bl in folder_blacklist]):
+            continue
+
+        for filename in filenames:
+            print filename
+            if ext and all([not filename.endswith(e) for e in ext]):
+                continue
+
+            if file_blacklist and \
+                    any([bl in filename for bl in file_blacklist]):
+                continue
+
+            files.append(
+                os.path.relpath(
+                    os.path.join(dirpath, filename),
+                    src_path
+                )
+            )
+    return files
 
 def abs_path(path, filename):
     """
@@ -95,4 +133,16 @@ def copy_files_task(src_path, dist_path, ext=None,
     for filename in get_files(src_path, ext=ext,
                               folder_blacklist=folder_blacklist,
                               file_blacklist=file_blacklist):
+        yield _task_for_file(copy, src_path, dist_path, filename, task_dep=task_dep)
+
+
+def copy_files_task2(src_path, dist_path, ext=None,
+                    folder_blacklist=None, file_blacklist=None,
+                    task_dep=None):
+    """
+    copy all files from src_path to dist_path. Includes subfolders.
+    """
+    for filename in get_files2(src_path, ext=ext,
+                               folder_blacklist=folder_blacklist,
+                               file_blacklist=file_blacklist):
         yield _task_for_file(copy, src_path, dist_path, filename, task_dep=task_dep)
