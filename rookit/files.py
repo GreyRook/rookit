@@ -35,7 +35,7 @@ def get_files(src_path, ext=None, folder_blacklist=None, file_blacklist=None):
     return files
 
 
-def get_files2(src_path, ext=None, folder_blacklist=None, file_blacklist=None):
+def get_files2(src_path, ext=None, folder_blacklist=[], file_blacklist=[]):
     """
     get list of all files in folder (including subfolder)
 
@@ -44,24 +44,26 @@ def get_files2(src_path, ext=None, folder_blacklist=None, file_blacklist=None):
     if isinstance(ext, basestring):
         ext = [ext]
     files = []
-    if folder_blacklist is None:
-        folder_blacklist = []
-    folder_blacklist = [folder.strip('/') for folder in folder_blacklist]
+
+    folder_blacklist_effective = []
+    for folder in folder_blacklist:
+        folder = folder.strip('/')
+        folder_blacklist_effective.append(folder)
+        folder_blacklist_effective.append(folder + '/*')
+
     for dirpath, dirnames, filenames in os.walk(src_path):
         rel_folder = dirpath[len(src_path):]
         rel_folder = rel_folder.strip('/')
-        print rel_folder, folder_blacklist
         if folder_blacklist and \
-                any([fnmatch.fnmatch(rel_folder, bl) for bl in folder_blacklist]):
+                any([fnmatch.fnmatch(rel_folder, bl) for bl in folder_blacklist_effective]):
             continue
 
         for filename in filenames:
-            print filename
             if ext and all([not filename.endswith(e) for e in ext]):
                 continue
 
             if file_blacklist and \
-                    any([bl in filename for bl in file_blacklist]):
+                    any([fnmatch.fnmatch(filename, bl) for bl in file_blacklist]):
                 continue
 
             files.append(
