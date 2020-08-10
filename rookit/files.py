@@ -11,7 +11,7 @@ def get_files(src_path, ext=None, folder_blacklist=None, file_blacklist=None):
 
     returns file path relative to the src-folder
     """
-    if isinstance(ext, basestring):
+    if isinstance(ext, str):
         ext = [ext]
     files = []
     for dirpath, dirnames, filenames in os.walk(src_path):
@@ -42,7 +42,7 @@ def get_files2(src_path, ext=None, folder_blacklist=[], file_blacklist=[]):
 
     returns file path relative to the src-folder
     """
-    if isinstance(ext, basestring):
+    if isinstance(ext, str):
         ext = [ext]
     files = []
 
