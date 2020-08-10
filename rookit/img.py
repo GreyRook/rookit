@@ -1,5 +1,5 @@
 # -*- coding=utf-8 -*-
-import StringIO
+import io
 import os
 import subprocess as sp
 
@@ -30,7 +30,7 @@ def convert_to_jpg(src, dst, quality=80):
     files.create_dist_path(dst)
 
     img = Image.open(src)
-    tmp = StringIO.StringIO()
+    tmp = io.StringIO()
     img.save(tmp, format="PPM")
     cmd = [CJPEG, '-quality', str(quality)]
     proc = sp.Popen(cmd, stdout=open(dst, 'w'), stdin=sp.PIPE)
