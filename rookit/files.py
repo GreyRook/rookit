@@ -4,7 +4,6 @@ import os
 import fnmatch
 import shutil
 
-
 def get_files(src_path, ext=None, folder_blacklist=None, file_blacklist=None):
     """
     get list of all files in folder (including subfolder)
@@ -75,7 +74,6 @@ def get_files2(src_path, ext=None, folder_blacklist=[], file_blacklist=[]):
             )
     return files
 
-
 def abs_path(path, filename):
     """
     get absolute path
@@ -91,7 +89,6 @@ def create_dist_path(dst):
         os.makedirs(dst_dir)
     return dst_dir
 
-
 def copy(src, dst):
     create_dist_path(dst)
     shutil.copy(src, dst)
@@ -104,8 +101,7 @@ def _task_for_file(task, src_path, dist_path, filename, task_dep=None):
     create_dist_path(dst)
 
     _task = {
-        'name': '{}'.format(filename),
-        'basename': '{} --> {}'.format(src_path, dist_path),
+        'name': '{} --> {}'.format(src, dst),
         'actions': [(task, [src, dst])],
         'targets': [dst],
         'file_dep': [src],
@@ -136,7 +132,6 @@ def copy_files_task(src_path, dist_path, ext=None,
     """
     copy all files from src_path to dist_path. Includes subfolders.
     """
-
     for filename in get_files(src_path, ext=ext,
                               folder_blacklist=folder_blacklist,
                               file_blacklist=file_blacklist):
@@ -149,7 +144,6 @@ def copy_files_task2(src_path, dist_path, ext=None,
     """
     copy all files from src_path to dist_path. Includes subfolders.
     """
-
     for filename in get_files2(src_path, ext=ext,
                                folder_blacklist=folder_blacklist,
                                file_blacklist=file_blacklist):
