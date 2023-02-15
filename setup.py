@@ -9,5 +9,5 @@ setup(name='rookit',
       author_email='a.bresser@greyrook.com',
       url='',
       packages=['rookit'],
-      install_requires=['doit==0.26.0', 'pyaml', 'csscompressor', 'nodeenv']
+      install_requires=['doit', 'pyaml', 'csscompressor', 'nodeenv']
 )
